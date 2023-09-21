@@ -1,0 +1,31 @@
+python
+from collections import defaultdict
+import time
+
+# Dicionário para rastrear tentativas de login por IP
+login_attempts = defaultdict(int)
+
+# Limite de tentativas de login antes do bloqueio
+max_login_attempts = 3
+
+# Tempo de bloqueio (em segundos)
+block_time = 60  # Um minuto
+
+def block_ip(ip):
+    print(f"IP {ip} foi bloqueado por {block_time} segundos.")
+    time.sleep(block_time)
+    print(f"IP {ip} desbloqueado após {block_time} segundos.")
+
+while True:
+    ip = input("Digite o IP do usuário: ")
+    if login_attempts[ip] >= max_login_attempts:
+        block_ip(ip)
+        login_attempts[ip] = 0  # Redefinir as tentativas após o desbloqueio
+    else:
+        password = input("Digite a senha: ")
+        if password == "senha_correta":
+            print("Login bem-sucedido!")
+            login_attempts[ip] = 0  # Redefinir as tentativas após um login bem-sucedido
+        else:
+            print("Login falhou. Tente novamente.")
+            login_attempts[ip] += 1
